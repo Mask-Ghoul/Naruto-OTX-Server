@@ -1112,7 +1112,8 @@ MagicEffectNames magicEffectNames[] =
 	{"bats", MAGIC_EFFECT_BATS},
 	{"smoke", MAGIC_EFFECT_SMOKE},
 	{"insects", MAGIC_EFFECT_INSECTS},
-	{"dragonhead", MAGIC_EFFECT_DRAGONHEAD}
+	{"dragonhead", MAGIC_EFFECT_DRAGONHEAD},
+	{"semfim", MAGIC_EFFECT_SEMFIM}
 };
 
 ShootTypeNames shootTypeNames[] =
@@ -1159,7 +1160,8 @@ ShootTypeNames shootTypeNames[] =
 	{"smallearth", SHOOT_EFFECT_SMALLEARTH},
 	{"eartharrow", SHOOT_EFFECT_EARTHARROW},
 	{"explosion", SHOOT_EFFECT_EXPLOSION},
-	{"cake", SHOOT_EFFECT_CAKE}
+	{"cake", SHOOT_EFFECT_CAKE},
+	{"semfim", SHOOT_EFFECT_SEMFIM}
 };
 
 CombatTypeNames combatTypeNames[] =

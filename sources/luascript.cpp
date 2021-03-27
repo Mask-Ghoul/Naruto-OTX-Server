@@ -2191,6 +2191,9 @@ void LuaInterface::registerFunctions()
 	//getCreatureName(cid)
 	lua_register(m_luaState, "getCreatureName", LuaInterface::luaGetCreatureName);
 
+	//setCreatureName(cid, name, description)
+	lua_register(m_luaState, "setCreatureName", LuaInterface::luaSetCreatureName);
+
 	//getCreatureSpeed(cid)
 	lua_register(m_luaState, "getCreatureSpeed", LuaInterface::luaGetCreatureSpeed);
 
@@ -8805,6 +8808,30 @@ int32_t LuaInterface::luaGetCreatureName(lua_State* L)
 	return 1;
 }
 
+int32_t LuaInterface::luaSetCreatureName(lua_State* L)
+{
+	// setCreatureName(cid, newName, newDescription)
+	std::string newDesc = popString(L);
+	std::string newName = popString(L);
+	ScriptEnviroment* env = getEnv();
+
+	Creature* creature;
+	if (creature = env->getCreatureByUID(popNumber(L)))
+	{
+		Monster* monster = (Monster*)creature;
+		monster->name = newName;
+		monster->nameDescription = newDesc;
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
 int32_t LuaInterface::luaGetCreatureNoMove(lua_State* L)
 {
 	//getCreatureNoMove(cid)
@@ -9592,7 +9619,7 @@ int32_t LuaInterface::luaIsPlayerUsingOtclient(lua_State* L)
 
 int32_t LuaInterface::luaDoSendPlayerExtendedOpcode(lua_State* L)
 {
-	//doSendPlayerExtendedOpcode(cid, opcode, buffer)
+	//doPlayerSendExtendedOpcode(cid, opcode, buffer)
 	std::string buffer = popString(L);
 	int32_t opcode = popNumber(L);
 

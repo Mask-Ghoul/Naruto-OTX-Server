@@ -272,35 +272,46 @@ bool Spawn::findPlayer(const Position& pos)
 	return false;
 }
 
-bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
+bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, int16_t t,
+    bool startup /*= false*/)
 {
-	Monster* monster = Monster::createMonster(mType);
-	if(!monster)
-		return false;
-
-	if(startup)
-	{
-		//No need to send out events to the surrounding since there is no one out there to listen!
-		if(!g_game.internalPlaceCreature(monster, pos, false, true))
-		{
-			delete monster;
-			return false;
-		}
-	}
-	else if(!g_game.placeCreature(monster, pos, false, true))
-	{
-		delete monster;
-		return false;
-	}
-
-	monster->setSpawn(this);
-	monster->setMasterPosition(pos, radius);
-	monster->setDirection(dir);
-
-	monster->addRef();
-	spawnedMap.insert(SpawnedPair(spawnId, monster));
-	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
-	return true;
+    Monster* monster = Monster::createMonster(mType);
+    if(!monster)
+        return false;
+ 
+    if(startup)
+    {
+        //No need to send out events to the surrounding since there is no one out there to listen!
+        if(!g_game.internalPlaceCreature(monster, pos, false, true))
+        {
+            delete monster;
+            return false;
+        }
+    }
+    else if (t == 0)
+    {
+        if (!g_game.placeCreature(monster, pos, false, true))
+        {
+            delete monster;
+            return false;
+        }
+    }
+    else {
+        g_game.addMagicEffect(pos, 1329);
+        Scheduler::getInstance().addEvent(createSchedulerTask(
+            1400, boost::bind(&Spawn::spawnMonster, this, spawnId, mType, pos, dir, t - 1400,false)));
+        return true;
+    }
+ 
+        monster->setSpawn(this);
+        monster->setMasterPosition(pos, radius);
+        monster->setDirection(dir);
+ 
+        monster->addRef();
+        spawnedMap.insert(SpawnedPair(spawnId, monster));
+        spawnMap[spawnId].lastSpawn = OTSYS_TIME();
+   
+    return true;
 }
 
 void Spawn::startup()
@@ -309,7 +320,7 @@ void Spawn::startup()
 	for(SpawnMap::iterator it = spawnMap.begin(); it != spawnMap.end(); ++it)
 	{
 		sb = it->second;
-		spawnMonster(it->first, sb.mType, sb.pos, sb.direction, true);
+		spawnMonster(it->first, sb.mType, sb.pos, sb.direction, false);
 	}
 }
 
@@ -351,7 +362,7 @@ void Spawn::checkSpawn()
 			continue;
 		}
 
-		spawnMonster(it->first, sb.mType, sb.pos, sb.direction);
+		spawnMonster(it->first, sb.mType, sb.pos, sb.direction, 4200);
 		uint32_t minSpawnCount = g_config.getNumber(ConfigManager::RATE_SPAWN_MIN),
 			maxSpawnCount = g_config.getNumber(ConfigManager::RATE_SPAWN_MAX);
 		if(++spawnCount >= (uint32_t)random_range(minSpawnCount, maxSpawnCount))

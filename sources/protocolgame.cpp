@@ -2006,7 +2006,7 @@ void ProtocolGame::sendPing()
 	msg->addByte(0x1E);
 }
 
-void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, uint8_t type)
+void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, uint16_t type)
 {
 	if(type > SHOOT_EFFECT_LAST || (!canSee(from) && !canSee(to)))
 		return;
@@ -2019,7 +2019,7 @@ void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, u
 	AddDistanceShoot(msg, from, to, type);
 }
 
-void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
+void ProtocolGame::sendMagicEffect(const Position& pos, uint16_t type)
 {
 	if(type > MAGIC_EFFECT_LAST || !canSee(pos))
 		return;
@@ -2682,20 +2682,20 @@ void ProtocolGame::AddAnimatedText(OutputMessage_ptr msg, const Position& pos,
 	msg->addString(text);
 }
 
-void ProtocolGame::AddMagicEffect(OutputMessage_ptr msg, const Position& pos, uint8_t type)
+void ProtocolGame::AddMagicEffect(OutputMessage_ptr msg, const Position& pos, uint16_t type)
 {
 	msg->addByte(0x83);
 	msg->addPosition(pos);
-	msg->addByte(type + 1);
+	msg->add<uint16_t>(type + 1);
 }
 
 void ProtocolGame::AddDistanceShoot(OutputMessage_ptr msg, const Position& from, const Position& to,
-	uint8_t type)
+	uint16_t type)
 {
 	msg->addByte(0x85);
 	msg->addPosition(from);
 	msg->addPosition(to);
-	msg->addByte(type + 1);
+	msg->add<uint16_t>(type + 1);
 }
 
 void ProtocolGame::AddCreature(OutputMessage_ptr msg, const Creature* creature, bool known, uint32_t remove)
@@ -2739,8 +2739,16 @@ void ProtocolGame::AddCreature(OutputMessage_ptr msg, const Creature* creature, 
 void ProtocolGame::AddPlayerStats(OutputMessage_ptr msg)
 {
 	msg->addByte(0xA0);
-	msg->add<uint16_t>(player->getHealth());
-	msg->add<uint16_t>(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
+	if (player->getPlayerInfo(PLAYERINFO_MAXHEALTH) > 0)
+    {
+        msg->add<uint16_t>(uint16_t(player->getHealth() * 100 / player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
+        msg->add<uint16_t>(100);
+    }
+    else
+    {
+        msg->add<uint16_t>(0);
+        msg->add<uint16_t>(0);  
+    }
 	uint32_t capacity = uint32_t(player->getFreeCapacity() * 100);
 	if (capacity >= INT32_MAX)
 		msg->add<uint32_t>(INT32_MAX);
@@ -2755,8 +2763,16 @@ void ProtocolGame::AddPlayerStats(OutputMessage_ptr msg)
 
 	msg->add<uint16_t>(player->getPlayerInfo(PLAYERINFO_LEVEL));
 	msg->addByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
-	msg->add<uint16_t>(player->getPlayerInfo(PLAYERINFO_MANA));
-	msg->add<uint16_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA));
+	if (player->getPlayerInfo(PLAYERINFO_MAXMANA) > 0)
+    {
+        msg->add<uint16_t>(player->getPlayerInfo(PLAYERINFO_MANA) * 100 / player->getPlayerInfo(PLAYERINFO_MAXMANA));
+        msg->add<uint16_t>(100);
+    }
+    else
+    {
+        msg->add<uint16_t>(0);
+        msg->add<uint16_t>(0);
+    }
 	msg->addByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVEL));
 	msg->addByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 	msg->addByte(player->getPlayerInfo(PLAYERINFO_SOUL));

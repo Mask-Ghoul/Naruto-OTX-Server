@@ -5501,7 +5501,7 @@ void Game::addAnimatedText(const SpectatorVec& list, const Position& pos, uint8_
 	}
 }
 
-void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode/* = false*/)
+void Game::addMagicEffect(const Position& pos, uint16_t effect, bool ghostMode/* = false*/)
 {
 	if(ghostMode)
 		return;
@@ -5511,7 +5511,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode/* 
 	addMagicEffect(list, pos, effect);
 }
 
-void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect,
+void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint16_t effect,
 	bool ghostMode/* = false*/)
 {
 	if(ghostMode)
@@ -5525,7 +5525,7 @@ void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t
 	}
 }
 
-void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
+void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint16_t effect)
 {
 	SpectatorVec list;
 	getSpectators(list, fromPos, false, true);
@@ -5534,7 +5534,7 @@ void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uin
 }
 
 void Game::addDistanceEffect(const SpectatorVec& list, const Position& fromPos,
-	const Position& toPos, uint8_t effect)
+	const Position& toPos, uint16_t effect)
 {
 	Player* player = NULL;
 	for(SpectatorVec::const_iterator it = list.begin(); it != list.end(); ++it)

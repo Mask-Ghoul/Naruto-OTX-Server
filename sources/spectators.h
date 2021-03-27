@@ -196,7 +196,7 @@ class Spectators
 			owner->sendFYIBox(message);
 		}
 
-		void sendDistanceShoot(const Position& from, const Position& to, uint8_t type)
+		void sendDistanceShoot(const Position& from, const Position& to, uint16_t type)
 		{
 			if(!owner)
 				return;
@@ -205,7 +205,7 @@ class Spectators
 			for(SpectatorList::iterator it = spectators.begin(); it != spectators.end(); ++it)
 				it->first->sendDistanceShoot(from, to, type);
 		}
-		void sendMagicEffect(const Position& pos, uint8_t type)
+		void sendMagicEffect(const Position& pos, uint16_t type)
 		{
 			if(!owner)
 				return;

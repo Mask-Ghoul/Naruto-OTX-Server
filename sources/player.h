@@ -654,7 +654,7 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendChangeSpeed(creature, newSpeed);}
 		void sendCreatureHealth(const Creature* creature) const
 			{if(client) client->sendCreatureHealth(creature);}
-		void sendDistanceShoot(const Position& from, const Position& to, uint8_t type) const
+		void sendDistanceShoot(const Position& from, const Position& to, uint16_t type) const
 			{if(client) client->sendDistanceShoot(from, to, type);}
 		void sendHouseWindow(House* house, uint32_t listId) const;
 		void sendOutfitWindow() const {if(client) client->sendOutfitWindow();}
@@ -669,7 +669,7 @@ class Player : public Creature, public Cylinder
 		void sendClosePrivate(uint16_t channelId) const
 			{if(client) client->sendClosePrivate(channelId);}
 		void sendIcons() const;
-		void sendMagicEffect(const Position& pos, uint8_t type) const
+		void sendMagicEffect(const Position& pos, uint16_t type) const
 			{if(client) client->sendMagicEffect(pos, type);}
 		void sendAnimatedText(const Position& pos, uint8_t color, const std::string& text) const
 			{if(client) client->sendAnimatedText(pos, color, text);}

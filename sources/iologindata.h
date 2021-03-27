@@ -92,6 +92,7 @@ class IOLoginData
 		bool getNameByGuid(uint32_t guid, std::string& name, bool multiworld = false);
 		bool getGuidByName(uint32_t& guid, std::string& name, bool multiworld = false);
 		bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
+		std::string getPlayerLevelAndVocation(const std::string& name) const;
 
 		bool changeName(uint32_t guid, std::string newName, std::string oldName);
 		bool createCharacter(uint32_t accountId, std::string characterName, int32_t vocationId, uint16_t sex);

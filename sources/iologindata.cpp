@@ -1698,6 +1698,49 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool &specialVip, std::string&
 	return true;
 }
 
+std::string IOLoginData::getPlayerLevelAndVocation(const std::string& name) const
+{
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `level`, `vocation`, `promotion` FROM `players` WHERE `name` " << db->getStringComparer() << db->escapeString(name) << ";";
+	
+	DBResult* result;
+	if(!(result = db->storeQuery(query.str())))
+		return false;
+	
+	const uint32_t playerLevel = result->getDataInt("level");
+	const uint32_t playerVocation = result->getDataInt("vocation");
+	
+	std::stringstream ret;
+	std::string voc;
+	
+		switch(playerVocation)
+		{
+			case 0: voc = "Nenhum";
+				break;
+			case 1: voc = "Naruto";
+				break;
+			case 2: voc = "Sasuke";
+				break;
+			case 3: voc = "Kakashi";
+				break;
+			case 4: voc = "Itachi";
+				break;
+			case 5: voc = "Tsunade";
+				break;
+			case 101: voc = "Sasuke Gaiden";
+				break;
+			case 102: voc = "Naruto Gaiden";
+				break;
+			default: voc = "Nenhuma";
+		} 
+		
+	ret << "Lvl: " << playerLevel << ", " << voc;
+	
+	result->free();
+	return ret.str();
+}
+
 bool IOLoginData::changeName(uint32_t guid, std::string newName, std::string oldName)
 {
 	Database* db = Database::getInstance();

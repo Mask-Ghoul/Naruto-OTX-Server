@@ -200,8 +200,8 @@ class ProtocolGame : public Protocol
 		void sendIcons(int32_t icons);
 		void sendFYIBox(const std::string& message);
 
-		void sendDistanceShoot(const Position& from, const Position& to, uint8_t type);
-		void sendMagicEffect(const Position& pos, uint8_t type);
+		void sendDistanceShoot(const Position& from, const Position& to, uint16_t type);
+		void sendMagicEffect(const Position& pos, uint16_t type);
 		void sendAnimatedText(const Position& pos, uint8_t color, std::string text);
 		void sendCreatureHealth(const Creature* creature);
 		void sendSkills();
@@ -297,8 +297,8 @@ class ProtocolGame : public Protocol
 			Position* pos = NULL, MessageDetails* details = NULL);
 		void AddAnimatedText(OutputMessage_ptr msg, const Position& pos,
 			uint8_t color, const std::string& text);
-		void AddMagicEffect(OutputMessage_ptr msg, const Position& pos, uint8_t type);
-		void AddDistanceShoot(OutputMessage_ptr msg, const Position& from, const Position& to, uint8_t type);
+		void AddMagicEffect(OutputMessage_ptr msg, const Position& pos, uint16_t type);
+		void AddDistanceShoot(OutputMessage_ptr msg, const Position& from, const Position& to, uint16_t type);
 		void AddCreature(OutputMessage_ptr msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(OutputMessage_ptr msg);
 		void AddCreatureSpeak(OutputMessage_ptr msg, const Creature* creature, MessageClasses type,

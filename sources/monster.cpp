@@ -65,6 +65,8 @@ Monster::Monster(MonsterType* _mType):
 
 	spawn = NULL;
 	raid = NULL;
+	name = _mType->name;
+	nameDescription = _mType->nameDescription;
 	defaultOutfit = mType->outfit;
 	currentOutfit = mType->outfit;
 

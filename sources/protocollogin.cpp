@@ -283,8 +283,14 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 					output->addString("Offline");
 			}
 			else
+			{
+			if((*it) != "Account Manager")
+			{
+				output->addString(IOLoginData::getInstance()->getPlayerLevelAndVocation((*it)));
+			}
+			else
 				output->addString(g_config.getString(ConfigManager::SERVER_NAME));
-
+			}
 			output->add<uint32_t>(serverIp);
 			IntegerVec games = vectorAtoi(explodeString(g_config.getString(ConfigManager::GAME_PORT), ","));
 			output->add<uint16_t>(games[random_range(0, games.size() - 1)]);
