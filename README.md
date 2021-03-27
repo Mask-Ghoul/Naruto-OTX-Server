@@ -13,3 +13,4 @@ Discord: Mask Ghoul#6343
 
 ### Support – Donation
 Naruto OTX is a community project. You can help by buying us a coffee.
+https://www.paypal.com/donate?hosted_button_id=XY5DXBHTNVELE
